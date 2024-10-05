@@ -33,12 +33,10 @@ const ZenaraLogin = () => {
             } else {
                 const errorData = await response.text();
                 setError(errorData || 'Invalid username or password.');
-                window.location.href = '/dash';
             }
         } catch (error) {
             setError('An error occurred. Please try again.');
             console.error('Login error:', error);
-            window.location.href = '/dash';
         } finally {
             setIsLoading(false);
         }
