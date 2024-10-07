@@ -5,6 +5,8 @@ import Dash from './dash';
 import Sec from './security';
 import Login from './login';
 import Quiz from  './quiz';
+import Learning from  './learning';
+
 function App() {
     return (
         <Router>
@@ -14,6 +16,7 @@ function App() {
                 <Route path="/sec" element={<Sec />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/quiz" element={<Quiz />} />
+                <Route path="/learning" element={<Learning />} />
             </Routes>
         </Router>
     );
