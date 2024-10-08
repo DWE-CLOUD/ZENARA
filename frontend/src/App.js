@@ -6,6 +6,7 @@ import Sec from './security';
 import Login from './login';
 import Quiz from  './quiz';
 import Learning from  './learning';
+import QuizBoard from './quizboard';
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/quiz" element={<Quiz />} />
                 <Route path="/learning" element={<Learning />} />
+                <Route path="/quizboard" element={<QuizBoard/>}/>
             </Routes>
         </Router>
     );
