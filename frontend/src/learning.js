@@ -3,15 +3,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Sun, Moon, Cloud, Star, Search } from 'lucide-react';
 
 const videos = [
-    { id: 1, title: "Understanding Personal Space", thumbnail: "/api/placeholder/640/360", level: "Beginner" },
-    { id: 2, title: "Safe and Unsafe Touches", thumbnail: "/api/placeholder/640/360", level: "Beginner" },
-    { id: 7, title: "Recognizing Safe and Unsafe Situations", thumbnail: "/api/placeholder/640/360", level: "Beginner" },
-    { id: 3, title: "How to Say No", thumbnail: "/api/placeholder/640/360", level: "Intermediate" },
-    { id: 4, title: "Trusted Adults", thumbnail: "/api/placeholder/640/360", level: "Intermediate" },
-    { id: 8, title: "Handling Peer Pressure", thumbnail: "/api/placeholder/640/360", level: "Intermediate" },
-    { id: 5, title: "Staying Safe Online", thumbnail: "/api/placeholder/640/360", level: "Advanced" },
-    { id: 6, title: "What to Do If You Feel Unsafe", thumbnail: "/api/placeholder/640/360", level: "Advanced" },
-    { id: 9, title: "Understanding Privacy Settings", thumbnail: "/api/placeholder/640/360", level: "Advanced" },
+    { id: 1, title: "Understanding Personal Space", thumbnail: require('./images/img.png'), level: "Beginner" },
+    { id: 2, title: "Safe and Unsafe Touches", thumbnail: require('./images/img_1.png'), level: "Beginner" },
+    { id: 3, title: "Recognizing Safe and Unsafe Situations", thumbnail: require('./images/img_2.png'), level: "Beginner" },
+    { id: 4, title: "How to Say No", thumbnail: require('./images/img_3.png'), level: "Intermediate" },
+    { id: 5, title: "Trusted Adults", thumbnail: require('./images/img_4.png'), level: "Intermediate" },
+    { id: 6, title: "Handling Peer Pressure", thumbnail: require('./images/img_5.png'), level: "Intermediate" },
+    { id: 7, title: "Staying Safe Online", thumbnail: require('./images/img_6.png'), level: "Advanced" },
+    { id: 8, title: "What to Do If You Feel Unsafe", thumbnail: require('./images/img_7.png'), level: "Advanced" },
+    { id: 9, title: "Understanding Privacy Settings", thumbnail: require('./images/img_8.png'), level: "Advanced" },
 ];
 
 const VideoThumbnail = ({ video, onWatch, watched, darkMode }) => {
@@ -29,12 +29,16 @@ const VideoThumbnail = ({ video, onWatch, watched, darkMode }) => {
                     : 'shadow-[0_8px_30px_rgb(0,0,0,0.12)]'} 
                     hover:shadow-[0_8px_30px_rgb(59,130,246,0.5)]`}
                 onClick={() => onWatch(video.id)}
-                style={{ width: '100%', height: '280px' }}
+                style={{ width: '100%', height: '280px' }} // Set a fixed height for the container
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
             >
-                <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover rounded-xl" />
+                <img
+                    src={video.thumbnail}
+                    alt={video.title}
+                    className="w-full h-full object-cover rounded-xl"
+                />
                 <div className="absolute inset-0 bg-purple-600 bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center rounded-xl">
                     <Play className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" size={48} />
                 </div>
