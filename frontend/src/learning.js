@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Sun, Moon, Cloud, Star, Search } from 'lucide-react';
 
@@ -17,7 +17,7 @@ const videos = [
 const VideoThumbnail = ({ video, onWatch, watched, darkMode }) => {
     return (
         <motion.div
-            className={`relative transition-all duration-300 ${watched ? 'bg-green-300 rounded-xl' : ''}`} // Changed to light green
+            className={`relative transition-all duration-300 ${watched ? 'bg-green-300 rounded-xl' : ''}`}
             style={{ zIndex: 30 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -50,10 +50,16 @@ const VideoThumbnail = ({ video, onWatch, watched, darkMode }) => {
 };
 
 const FriendlyCircularProgress = ({ completed, total, darkMode }) => {
-    const radius = 15;
+    const radius = 16; // Increased from 15 to 16 to match the circle's r attribute
     const circumference = 2 * Math.PI * radius;
-    const fillPercentage = (completed / total) * 100;
-    const dashOffset = circumference - (fillPercentage / 100) * circumference;
+
+    // Calculate fill percentage
+    const fillPercentage = completed >= total ? 100 : (completed / total) * 100;
+
+    // Calculate the stroke dash offset, ensuring it's 0 when fillPercentage is 100
+    const dashOffset = fillPercentage === 100
+        ? 0  // Explicitly set to 0 for full completion
+        : circumference - (fillPercentage / 100) * circumference;
 
     return (
         <div className="flex flex-col items-center" style={{ zIndex: 60 }}>
@@ -65,14 +71,22 @@ const FriendlyCircularProgress = ({ completed, total, darkMode }) => {
                         cy="20"
                         r="16"
                         fill="none"
-                        stroke={completed === total ? "#10B981" : "#3B82F6"}
+                        stroke={fillPercentage === 100 ? "#10B981" : "#3B82F6"}
                         strokeWidth="4"
                         strokeDasharray={circumference}
                         strokeDashoffset={dashOffset}
-                        strokeLinecap="round"
+                        strokeLinecap="butt" // Changed from "round" to "butt"
                         transform="rotate(-90 20 20)"
                     />
-                    <text x="20" y="20" textAnchor="middle" dy=".3em" fontSize="8" fill={darkMode ? "#FFFFFF" : "#333333"} fontWeight="bold">
+                    <text
+                        x="20"
+                        y="20"
+                        textAnchor="middle"
+                        dy=".3em"
+                        fontSize="8"
+                        fill={darkMode ? "#FFFFFF" : "#333333"}
+                        fontWeight="bold"
+                    >
                         {`${completed}/${total}`}
                     </text>
                 </svg>
@@ -86,6 +100,7 @@ const AnimatedCloud = ({ darkMode, size, top, left, right, animationDuration }) 
         <motion.div
             className="absolute"
             style={{ top, left, right, zIndex: 10 }}
+            initial={{ y: 0, opacity: 0.6 }}
             animate={{
                 y: [0, 20, 0],
                 opacity: [0.6, 1, 0.6],
@@ -102,24 +117,38 @@ const AnimatedCloud = ({ darkMode, size, top, left, right, animationDuration }) 
 };
 
 const BackgroundElements = ({ darkMode }) => {
+    const cloudPositions = useMemo(() => [
+        { size: 60, top: "20px", left: "10%", animationDuration: 5 },
+        { size: 80, top: "60%", right: "5%", animationDuration: 7 },
+        { size: 50, top: "40%", left: "20%", animationDuration: 6 },
+        { size: 70, top: "10%", right: "15%", animationDuration: 8 },
+    ], []);
+
+    const starPositions = useMemo(() =>
+            Array.from({ length: 6 }).map(() => ({
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                duration: 3 + Math.random() * 2,
+            })),
+        []);
+
     return (
         <>
-            <AnimatedCloud darkMode={darkMode} size={60} top="20px" left="10%" animationDuration={5} />
-            <AnimatedCloud darkMode={darkMode} size={80} top="60%" right="5%" animationDuration={7} />
-            <AnimatedCloud darkMode={darkMode} size={50} top="40%" left="20%" animationDuration={6} />
-            <AnimatedCloud darkMode={darkMode} size={70} top="10%" right="15%" animationDuration={8} />
-            {darkMode && Array.from({ length: 6 }).map((_, index) => (
+            {!darkMode && cloudPositions.map((cloud, index) => (
+                <AnimatedCloud key={index} darkMode={darkMode} {...cloud} />
+            ))}
+            {darkMode && starPositions.map((star, index) => (
                 <motion.div
                     key={index}
                     className="absolute"
-                    style={{ zIndex: 10, top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%` }}
+                    style={{ zIndex: 10, top: star.top, left: star.left }}
                     animate={{
                         scale: [0.8, 1.2, 0.8],
                         opacity: [0.6, 1, 0.6],
                     }}
                     transition={{
                         repeat: Infinity,
-                        duration: 3 + Math.random() * 2,
+                        duration: star.duration,
                         ease: "easeInOut",
                     }}
                 >
@@ -130,9 +159,10 @@ const BackgroundElements = ({ darkMode }) => {
     );
 };
 
-const SearchBar = ({ darkMode, onSearch, filteredCount, totalCount }) => {
+const SearchBar = ({ darkMode, onSearch, onFilterChange, filteredCount, totalCount }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedLevel, setSelectedLevel] = useState('All');
 
     const handleSearchClick = () => {
         if (isExpanded && searchTerm) {
@@ -144,13 +174,18 @@ const SearchBar = ({ darkMode, onSearch, filteredCount, totalCount }) => {
 
     const handleInputChange = (e) => {
         setSearchTerm(e.target.value);
-        onSearch(e.target.value);
+        onSearch(e.target.value, selectedLevel);
+    };
+
+    const handleLevelChange = (e) => {
+        setSelectedLevel(e.target.value);
+        onFilterChange(searchTerm, e.target.value);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (searchTerm) {
-            onSearch(searchTerm);
+            onSearch(searchTerm, selectedLevel);
         }
     };
 
@@ -158,19 +193,35 @@ const SearchBar = ({ darkMode, onSearch, filteredCount, totalCount }) => {
         <form onSubmit={handleSubmit} className="relative flex flex-col items-center" style={{ zIndex: 70 }}>
             <AnimatePresence>
                 {isExpanded && (
-                    <motion.input
+                    <motion.div
                         initial={{ width: 0, opacity: 0 }}
-                        animate={{ width: "200px", opacity: 1 }}
+                        animate={{ width: "300px", opacity: 1 }}
                         exit={{ width: 0, opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        type="text"
-                        placeholder="Search videos..."
-                        className={`py-2 px-4 rounded-full outline-none ${
-                            darkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'
-                        }`}
-                        value={searchTerm}
-                        onChange={handleInputChange}
-                    />
+                        className="flex"
+                    >
+                        <input
+                            type="text"
+                            placeholder="Search videos..."
+                            className={`py-2 px-4 rounded-l-full outline-none flex-grow ${
+                                darkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'
+                            }`}
+                            value={searchTerm}
+                            onChange={handleInputChange}
+                        />
+                        <select
+                            value={selectedLevel}
+                            onChange={handleLevelChange}
+                            className={`py-2 px-4 rounded-r-full outline-none ${
+                                darkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'
+                            }`}
+                        >
+                            <option value="All">All Levels</option>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                    </motion.div>
                 )}
             </AnimatePresence>
             <motion.button
@@ -206,10 +257,11 @@ const ChildSafetyLearningPage = () => {
         }
     };
 
-    const handleSearch = (searchTerm) => {
+    const handleSearch = (searchTerm, level) => {
         const filtered = videos.filter(video =>
-            video.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            video.level.toLowerCase().includes(searchTerm.toLowerCase())
+            (video.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                video.level.toLowerCase().includes(searchTerm.toLowerCase())) &&
+            (level === 'All' || video.level === level)
         );
         setFilteredVideos(filtered);
     };
@@ -263,6 +315,7 @@ const ChildSafetyLearningPage = () => {
                     <SearchBar
                         darkMode={darkMode}
                         onSearch={handleSearch}
+                        onFilterChange={handleSearch}
                         filteredCount={filteredVideos.length}
                         totalCount={videos.length}
                     />
