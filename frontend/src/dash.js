@@ -1,6 +1,51 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Moon, Heart, Shield, Book, Star, Map, Gift, Music, Camera, Smile, Zap } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Sun, Moon, Heart, Shield, Book, Star, Play, Brain, Music, Camera, Smile, Zap } from 'lucide-react';
+
+const FeatureIcon = ({ icon, color, link }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (link) {
+      navigate(link); // Redirects to the specified link
+    }
+  };
+
+  return (
+      <motion.div
+          whileHover={{ scale: 1.1 }}
+          onClick={handleClick}
+          className={`flex items-center justify-center rounded-full w-16 h-16 shadow-md cursor-pointer ${color}`}
+      >
+        {icon}
+      </motion.div>
+  );
+};
+
+const ActivityCard = ({ icon, title, description, isDarkMode, link }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (link) {
+      navigate(link); // Redirects to the specified link
+    }
+  };
+
+  return (
+      <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className={`rounded-lg shadow-lg p-6 text-center ${isDarkMode ? 'bg-gray-800' : 'bg-white'} cursor-pointer`}
+          onClick={handleClick} // Add the onClick handler
+      >
+        <div className="flex justify-center mb-4">{icon}</div>
+        <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>{title}</h3>
+        <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>{description}</p>
+      </motion.div>
+  );
+};
 
 const KidFriendlySafetyHomepage = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -55,11 +100,11 @@ const KidFriendlySafetyHomepage = () => {
                 className="grid grid-cols-3 gap-4"
             >
               <FeatureIcon icon={<Heart />} color={isDarkMode ? "text-red-400" : "text-red-500"} />
-              <FeatureIcon icon={<Shield />} color={isDarkMode ? "text-green-400" : "text-green-500"} />
+              <FeatureIcon icon={<Shield />} color={isDarkMode ? "text-green-400" : "text-green-500"} link="/sec" />
               <FeatureIcon icon={<Book />} color={isDarkMode ? "text-blue-400" : "text-blue-500"} />
               <FeatureIcon icon={<Star />} color={isDarkMode ? "text-yellow-400" : "text-yellow-500"} />
-              <FeatureIcon icon={<Map />} color={isDarkMode ? "text-indigo-400" : "text-indigo-500"} />
-              <FeatureIcon icon={<Gift />} color={isDarkMode ? "text-pink-400" : "text-pink-500"} />
+              <FeatureIcon icon={<Play />} color={isDarkMode ? "text-indigo-400" : "text-indigo-500"} link="/learning" />
+              <FeatureIcon icon={<Brain />} color={isDarkMode ? "text-pink-400" : "text-pink-500"} link="/QuizBoard" />
             </motion.div>
           </div>
 
@@ -85,6 +130,7 @@ const KidFriendlySafetyHomepage = () => {
                 title="Safety Songs"
                 description="Learn safety rules through fun and catchy tunes!"
                 isDarkMode={isDarkMode}
+                link="/music" // Pass the link prop here
             />
             <ActivityCard
                 icon={<Camera className={`w-12 h-12 ${isDarkMode ? 'text-green-300' : 'text-green-500'}`} />}
@@ -126,27 +172,5 @@ const KidFriendlySafetyHomepage = () => {
       </div>
   );
 };
-
-const FeatureIcon = ({ icon, color }) => (
-    <motion.div
-        whileHover={{ scale: 1.1 }}
-        className={`flex items-center justify-center rounded-full w-16 h-16 shadow-md ${color}`}
-    >
-      {icon}
-    </motion.div>
-);
-
-const ActivityCard = ({ icon, title, description, isDarkMode }) => (
-    <motion.div
-        initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className={`rounded-lg shadow-lg p-6 text-center ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
-    >
-      <div className="flex justify-center mb-4">{icon}</div>
-      <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>{title}</h3>
-      <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>{description}</p>
-    </motion.div>
-);
 
 export default KidFriendlySafetyHomepage;
