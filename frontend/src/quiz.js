@@ -15,7 +15,7 @@ const Button = ({ children, onClick, variant = 'default', size = 'md', disabled 
   const styles = `${baseStyles} ${variants[variant]} ${sizes[size]} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`;
 
   return (
-    <button onClick={onClick} className={styles} disabled={disabled} style={{ zIndex: 100 }}>
+    <button onClick={onClick} className={styles} disabled={disabled}>
       {children}
     </button>
   );
@@ -23,7 +23,7 @@ const Button = ({ children, onClick, variant = 'default', size = 'md', disabled 
 
 // Define the Card and its parts inline
 const Card = ({ children, className }) => (
-  <div className={`border shadow-2xl rounded-lg p-6 transition-transform transform hover:scale-105 ${className}`} style={{ zIndex: 10 }}>
+  <div className={`border shadow-2xl rounded-lg p-6 transition-transform transform hover:scale-105 ${className}`}>
     {children}
   </div>
 );
@@ -114,11 +114,12 @@ const QuizApp = () => {
       setScore(score + 1);
     }
 
+    // Clear selected answer and move to the next question
     if (currentQuestion + 1 < quizData.length) {
       setCurrentQuestion(currentQuestion + 1);
-      setSelectedAnswer("");
+      setSelectedAnswer(""); // Reset selected answer for the new question
     } else {
-      setShowResult(true);
+      setShowResult(true); // Show results if it's the last question
     }
   };
 
@@ -135,10 +136,10 @@ const QuizApp = () => {
 
   const bgClass = darkMode
     ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 text-gray-900'
-    : 'bg-gradient-to-br from-yellow-100 via-pink-100 to-blue-100 text-gray-900';
+    : 'bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 text-gray-900'; // Adjust light mode colors
 
   return (
-    <div className={`min-h-screen flex items-center justify-center ${bgClass}`} style={{ zIndex: 1 }}>
+    <div className={`min-h-screen flex items-center justify-center ${bgClass}`}>
       <Card className={`w-full max-w-md bg-white ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
         <CardHeader>
           <CardTitle className="flex justify-between items-center">
@@ -151,12 +152,17 @@ const QuizApp = () => {
         <CardContent>
           {!showResult ? (
             <>
-              <h2 className="text-xl font-bold mb-4 text-black">{quizData[currentQuestion].question}</h2> {/* Question text in black */}
+              <h2 className="text-xl font-bold mb-4 text-black">{quizData[currentQuestion].question}</h2>
               <RadioGroup value={selectedAnswer} onValueChange={setSelectedAnswer}>
                 {quizData[currentQuestion].options.map((option, index) => (
                   <div key={index} className="flex items-center space-x-2 mb-2">
-                    <RadioGroupItem value={option} id={`option-${index}`} />
-                    <Label htmlFor={`option-${index}`} className="text-black">{option}</Label> {/* Option text in black */}
+                    <RadioGroupItem 
+                      value={option} 
+                      id={`option-${index}`} 
+                      checked={selectedAnswer === option} 
+                      onChange={() => setSelectedAnswer(option)} 
+                    />
+                    <Label htmlFor={`option-${index}`} className="text-black">{option}</Label>
                   </div>
                 ))}
               </RadioGroup>
@@ -169,11 +175,10 @@ const QuizApp = () => {
           )}
         </CardContent>
         <CardFooter className="flex justify-center">
-          {!showResult ? (
-            <Button onClick={handleAnswerSubmit} disabled={!selectedAnswer}>
-              {currentQuestion === quizData.length - 1 ? "Finish Quiz" : "Next Question"}
-            </Button>
-          ) : (
+          <Button onClick={handleAnswerSubmit}>
+            {currentQuestion === quizData.length - 1 ? "Finish Quiz" : "Next Question"}
+          </Button>
+          {showResult && (
             <Button onClick={resetQuiz}>Try Again</Button>
           )}
         </CardFooter>
