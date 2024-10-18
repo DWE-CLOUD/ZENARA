@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Sun, Moon, Search, Music, Speaker, Repeat, Volume2, Star, Bluetooth, Headphones, Volume1, VolumeX, Lamp } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Sun, Moon, Search, Music, Speaker, Repeat, Volume2, Star, Bluetooth, Headphones, Volume1, VolumeX } from 'lucide-react';
 
 const musicTracks = [
     { id: 1, title: 'Peaceful Piano', artist: 'John Doe', url: '/api/placeholder/audio1', duration: 180 },
@@ -53,8 +53,6 @@ const CalmMusicPlayer = () => {
     const [outputDevice, setOutputDevice] = useState('speaker');
     const [isMuted, setIsMuted] = useState(false);
     const audioRef = useRef(new Audio(currentTrack.url));
-    const [isLampHovered, setIsLampHovered] = useState(false);
-    const lampColor = isLampHovered ? 'text-yellow-400' : 'text-white';
 
     useEffect(() => {
         audioRef.current.src = currentTrack.url;
@@ -65,16 +63,6 @@ const CalmMusicPlayer = () => {
 
     const togglePlayPause = () => {
         setIsPlaying(!isPlaying);
-    };
-
-    const handleLampHover = () => {
-        if (darkMode) {
-            setIsLampHovered(true);
-        }
-    };
-
-    const handleLampLeave = () => {
-
     };
 
     const playNext = () => {
@@ -152,9 +140,6 @@ const CalmMusicPlayer = () => {
 
     const toggleDarkMode = () => {
         setDarkMode(!darkMode);
-        if (!darkMode) {
-            setIsLampHovered(false);
-        }
     };
 
     return (
@@ -162,20 +147,11 @@ const CalmMusicPlayer = () => {
             ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 text-white'
             : 'bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 text-gray-900'}`}>
 
-            {darkMode ? (
-                <Lamp
-                    className={`absolute top-4 left-4 z-10 ${lampColor}`}
-                    size={40}
-                    onMouseEnter={handleLampHover}
-                    onMouseLeave={handleLampLeave}
-                />
-            ) : (
-                <AnimatedLeaf />
-            )}
+            <AnimatedLeaf />
 
             <div className="container mx-auto p-4 relative z-50">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className={`text-3xl font-bold ${darkMode ? lampColor : 'text-black'}`}>
+                <div className={`flex justify-between items-center mb-6 flex-wrap`}>
+                    <h1 className={`text-2xl md:text-3xl font-bold ${darkMode ? 'text-white' : 'text-black'}`}>
                         Safety Songs
                     </h1>
                     <button onClick={toggleDarkMode} className={`p-2 rounded-full ${darkMode ? 'bg-purple-500 text-yellow-300' : 'bg-yellow-400 text-purple-900'} transition-colors duration-300`}>
@@ -192,23 +168,23 @@ const CalmMusicPlayer = () => {
                             onChange={handleSearch}
                             className={`w-full p-2 pl-10 rounded-full ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} transition-all duration-300 focus:ring-2 focus:ring-purple-500`}
                         />
-                        <Search className="absolute left-3 top-2.5 text-gray-400" size={20}/>
+                        <Search className="absolute left-3 top-2.5 text-gray-400" size={20} />
                     </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} transition-colors duration-300`}>
                         <h2 className="text-xl font-semibold mb-4">Now Playing</h2>
-                        <div className="flex items-center space-x-4 mb-4">
+                        <div className="flex items-center space-x-4 mb-4 flex-wrap">
                             <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
-                                <Music size={32} className="text-gray-600"/>
+                                <Music size={32} className="text-gray-600" />
                             </div>
-                            <div>
+                            <div className="flex-1">
                                 <p className="font-semibold">{currentTrack.title}</p>
                                 <p className="text-sm text-gray-500">{currentTrack.artist}</p>
                             </div>
                             <button onClick={() => toggleFavorite(currentTrack)} className="ml-auto">
-                                <Star size={24} className={isFavorite(currentTrack) ? 'text-yellow-400 fill-current' : 'text-gray-400'}/>
+                                <Star size={24} className={isFavorite(currentTrack) ? 'text-yellow-400 fill-current' : 'text-gray-400'} />
                             </button>
                         </div>
                         <div className="mb-4">
@@ -227,21 +203,21 @@ const CalmMusicPlayer = () => {
                         </div>
                         <div className="flex justify-center items-center space-x-4">
                             <button onClick={playPrevious} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300">
-                                <SkipBack size={24}/>
+                                <SkipBack size={24} />
                             </button>
                             <button onClick={togglePlayPause} className="p-4 rounded-full bg-purple-600 hover:bg-purple-700 text-white transition-colors duration-300">
-                                {isPlaying ? <Pause size={24}/> : <Play size={24}/>}
+                                {isPlaying ? <Pause size={24} /> : <Play size={24} />}
                             </button>
                             <button onClick={playNext} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300">
-                                <SkipForward size={24}/>
+                                <SkipForward size={24} />
                             </button>
                         </div>
                         <div className="flex justify-between items-center mt-4">
                             <button onClick={toggleRepeat} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300">
-                                <Repeat size={24} className={repeatMode ? 'text-purple-600' : 'text-gray-600'}/>
+                                <Repeat size={24} className={repeatMode ? 'text-purple-600' : 'text-gray-600'} />
                             </button>
                             <button onClick={toggleMute} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300">
-                                {isMuted ? <VolumeX size={24}/> : volume > 0.5 ? <Volume2 size={24}/> : <Volume1 size={24}/>}
+                                {isMuted ? <VolumeX size={24} /> : volume > 0.5 ? <Volume2 size={24} /> : <Volume1 size={24} />}
                             </button>
                             <input
                                 type="range"
@@ -252,25 +228,32 @@ const CalmMusicPlayer = () => {
                                 className="w-32"
                             />
                             <div className="flex space-x-2">
-                                <button onClick={() => changeOutputDevice('speaker')} className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 ${outputDevice === 'speaker' ? 'text-purple-600' : ''}`}>
+                                <button onClick={() => changeOutputDevice('speaker')}
+                                        className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 ${outputDevice === 'speaker' ? 'text-purple-600' : ''}`}>
                                     <Speaker size={24}/>
                                 </button>
-                                <button onClick={() => changeOutputDevice('bluetooth')} className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 ${outputDevice === 'bluetooth' ? 'text-purple-600' : ''}`}>
+                                <button onClick={() => changeOutputDevice('bluetooth')}
+                                        className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 ${outputDevice === 'bluetooth' ? 'text-purple-600' : ''}`}>
                                     <Bluetooth size={24}/>
                                 </button>
-                                <button onClick={() => changeOutputDevice('headphones')} className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 ${outputDevice === 'headphones' ? 'text-purple-600' : ''}`}>
-                                    <Headphones size={24}/>
+                                <button onClick={() => changeOutputDevice('headphones')}
+                                        className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 ${outputDevice === 'headphones' ? 'text-purple-600' : ''}`}
+                                        style={{padding: '4px'}}>
+                                    <Headphones size={20} className="overflow-hidden"/>
                                 </button>
                             </div>
+
                         </div>
                     </div>
 
-                    <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} transition-colors duration-300`}>
+                    <div
+                        className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} transition-colors duration-300`}>
                         <h2 className="text-xl font-semibold mb-4">Recently Played</h2>
                         <ul className="space-y-2 mb-6">
                             {recentlyPlayed.map(track => (
-                                <li key={track.id} onClick={() => selectTrack(track)} className={`p-2 rounded cursor-pointer flex items-center justify-between ${currentTrack.id === track.id ? 'bg-purple-200 dark:bg-purple-900' : 'hover:bg-gray-100 dark:hover:bg-gray-700'} transition-colors duration-300`}>
-                                    <div>
+                                <li key={track.id} onClick={() => selectTrack(track)}
+                                    className={`p-2 rounded cursor-pointer flex items-center justify-between ${currentTrack.id === track.id ? 'bg-purple-200 dark:bg-purple-900' : 'hover:bg-gray-100 dark:hover:bg-gray-700'} transition-colors duration-300`}>
+                                    <div className="flex-1">
                                         <p className="font-semibold">{track.title}</p>
                                         <p className="text-sm text-gray-500">{track.artist}</p>
                                     </div>
@@ -278,7 +261,7 @@ const CalmMusicPlayer = () => {
                                         e.stopPropagation();
                                         toggleFavorite(track);
                                     }}>
-                                        <Star size={20} className={isFavorite(track) ? 'text-yellow-400 fill-current' : 'text-gray-400'}/>
+                                        <Star size={20} className={isFavorite(track) ? 'text-yellow-400 fill-current' : 'text-gray-400'} />
                                     </button>
                                 </li>
                             ))}
@@ -288,7 +271,7 @@ const CalmMusicPlayer = () => {
                         <ul className="space-y-2">
                             {favorites.map(track => (
                                 <li key={track.id} onClick={() => selectTrack(track)} className={`p-2 rounded cursor-pointer flex items-center justify-between ${currentTrack.id === track.id ? 'bg-purple-200 dark:bg-purple-900' : 'hover:bg-gray-100 dark:hover:bg-gray-700'} transition-colors duration-300`}>
-                                    <div>
+                                    <div className="flex-1">
                                         <p className="font-semibold">{track.title}</p>
                                         <p className="text-sm text-gray-500">{track.artist}</p>
                                     </div>
@@ -296,7 +279,7 @@ const CalmMusicPlayer = () => {
                                         e.stopPropagation();
                                         toggleFavorite(track);
                                     }}>
-                                        <Star size={20} className={isFavorite(track) ? 'text-yellow-400 fill-current' : 'text-gray-400'}/>
+                                        <Star size={20} className={isFavorite(track) ? 'text-yellow-400 fill-current' : 'text-gray-400'} />
                                     </button>
                                 </li>
                             ))}
@@ -309,7 +292,7 @@ const CalmMusicPlayer = () => {
                     <ul className="space-y-2">
                         {filteredTracks.map(track => (
                             <li key={track.id} onClick={() => selectTrack(track)} className={`p-2 rounded cursor-pointer flex items-center justify-between ${currentTrack.id === track.id ? 'bg-purple-200 dark:bg-purple-900' : 'hover:bg-gray-100 dark:hover:bg-gray-700'} transition-colors duration-300`}>
-                                <div>
+                                <div className="flex-1">
                                     <p className="font-semibold">{track.title}</p>
                                     <p className="text-sm text-gray-500">{track.artist}</p>
                                 </div>
@@ -317,7 +300,7 @@ const CalmMusicPlayer = () => {
                                     e.stopPropagation();
                                     toggleFavorite(track);
                                 }}>
-                                    <Star size={20} className={isFavorite(track) ? 'text-yellow-400 fill-current' : 'text-gray-400'}/>
+                                    <Star size={20} className={isFavorite(track) ? 'text-yellow-400 fill-current' : 'text-gray-400'} />
                                 </button>
                             </li>
                         ))}

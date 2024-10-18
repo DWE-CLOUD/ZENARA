@@ -238,6 +238,7 @@ const QuizApp = () => {
   };
 
   const bgClass = darkMode
+
     ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 text-gray-200 shadow-lg'
     : 'bg-gradient-to-br from-blue-100 via-pink-100 to-yellow-100 text-gray-900 shadow-2xl';
 
@@ -353,6 +354,7 @@ const QuizApp = () => {
       </div>
 
       <Card className={`w-full max-w-md bg-white ${showResult ? 'card-bounce-in' : 'card-fade-in'}`}>
+
         <CardHeader>
           <CardTitle className="flex justify-between items-center">
             <span className="text-gray-900">Fun Quiz for Kids!</span>
@@ -368,11 +370,13 @@ const QuizApp = () => {
               <RadioGroup value={selectedAnswer} onValueChange={setSelectedAnswer}>
                 {quizData[currentQuestion].options.map((option, index) => (
                   <div key={index} className="flex items-center space-x-2 mb-2">
+
                     <RadioGroupItem
                       value={option}
                       id={`option-${index}`}
                       checked={selectedAnswer === option}
                       onChange={() => setSelectedAnswer(option)}
+
                     />
                     <Label htmlFor={`option-${index}`} className="text-black">{option}</Label>
                   </div>
@@ -387,7 +391,9 @@ const QuizApp = () => {
           )}
         </CardContent>
         <CardFooter className="flex justify-center">
+
           <Button onClick={handleAnswerSubmit} disabled={!selectedAnswer}>
+
             {currentQuestion === quizData.length - 1 ? "Finish Quiz" : "Next Question"}
           </Button>
           {showResult && (

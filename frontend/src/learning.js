@@ -54,16 +54,10 @@ const VideoThumbnail = ({ video, onWatch, watched, darkMode }) => {
 };
 
 const FriendlyCircularProgress = ({ completed, total, darkMode }) => {
-    const radius = 16; // Increased from 15 to 16 to match the circle's r attribute
+    const radius = 16;
     const circumference = 2 * Math.PI * radius;
-
-    // Calculate fill percentage
     const fillPercentage = completed >= total ? 100 : (completed / total) * 100;
-
-    // Calculate the stroke dash offset, ensuring it's 0 when fillPercentage is 100
-    const dashOffset = fillPercentage === 100
-        ? 0  // Explicitly set to 0 for full completion
-        : circumference - (fillPercentage / 100) * circumference;
+    const dashOffset = fillPercentage === 100 ? 0 : circumference - (fillPercentage / 100) * circumference;
 
     return (
         <div className="flex flex-col items-center" style={{ zIndex: 60 }}>
@@ -79,7 +73,7 @@ const FriendlyCircularProgress = ({ completed, total, darkMode }) => {
                         strokeWidth="4"
                         strokeDasharray={circumference}
                         strokeDashoffset={dashOffset}
-                        strokeLinecap="butt" // Changed from "round" to "butt"
+                        strokeLinecap="butt"
                         transform="rotate(-90 20 20)"
                     />
                     <text
@@ -122,42 +116,16 @@ const AnimatedCloud = ({ darkMode, size, top, left, right, animationDuration }) 
 
 const BackgroundElements = ({ darkMode }) => {
     const cloudPositions = useMemo(() => [
-        { size: 60, top: "20px", left: "10%", animationDuration: 5 },
-        { size: 80, top: "60%", right: "5%", animationDuration: 7 },
-        { size: 50, top: "40%", left: "20%", animationDuration: 6 },
-        { size: 70, top: "10%", right: "15%", animationDuration: 8 },
+        { size: 60, top: "10%", left: "10%", animationDuration: 5 },
+        { size: 80, top: "30%", right: "5%", animationDuration: 7 },
+        { size: 50, top: "50%", left: "20%", animationDuration: 6 },
+        { size: 70, top: "20%", right: "15%", animationDuration: 8 },
     ], []);
-
-    const starPositions = useMemo(() =>
-            Array.from({ length: 6 }).map(() => ({
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                duration: 3 + Math.random() * 2,
-            })),
-        []);
 
     return (
         <>
             {!darkMode && cloudPositions.map((cloud, index) => (
                 <AnimatedCloud key={index} darkMode={darkMode} {...cloud} />
-            ))}
-            {darkMode && starPositions.map((star, index) => (
-                <motion.div
-                    key={index}
-                    className="absolute"
-                    style={{ zIndex: 10, top: star.top, left: star.left }}
-                    animate={{
-                        scale: [0.8, 1.2, 0.8],
-                        opacity: [0.6, 1, 0.6],
-                    }}
-                    transition={{
-                        repeat: Infinity,
-                        duration: star.duration,
-                        ease: "easeInOut",
-                    }}
-                >
-                    <Star size={30} className="text-yellow-400" />
-                </motion.div>
             ))}
         </>
     );
@@ -194,7 +162,7 @@ const SearchBar = ({ darkMode, onSearch, onFilterChange, filteredCount, totalCou
     };
 
     return (
-        <form onSubmit={handleSubmit} className="relative flex flex-col items-center" style={{ zIndex: 70 }}>
+        <form onSubmit={handleSubmit} className="relative flex flex-col items-center mb-4" style={{ zIndex: 70 }}>
             <AnimatePresence>
                 {isExpanded && (
                     <motion.div
@@ -289,9 +257,9 @@ const ChildSafetyLearningPage = () => {
                 <FriendlyCircularProgress completed={watchedVideos.length} total={videos.length} darkMode={darkMode} />
             </div>
 
-            <div className="max-w-6xl mx-auto relative" style={{ zIndex: 20 }}>
+            <div className="max-w-full mx-auto relative" style={{ zIndex: 20 }}>
                 <motion.h1
-                    className={`text-4xl font-bold ${textClass} mb-8 text-center`}
+                    className={`text-3xl md:text-4xl font-bold ${textClass} mb-8 text-center`}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
@@ -332,7 +300,7 @@ const ChildSafetyLearningPage = () => {
                     return (
                         <div key={level} className="mb-8">
                             <h2 className={`text-lg ${textClass} mb-4 text-center`}>{level} Videos</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {levelVideos.map(video => (
                                     <VideoThumbnail
                                         key={video.id}

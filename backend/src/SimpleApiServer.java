@@ -23,6 +23,7 @@ public class SimpleApiServer {
     private static final String UPLOAD_DIR = "uploads";
     private static final String OPEN_LIBRARY_API_URL = "https://openlibrary.org/search.json";
 
+
     public static void main(String[] args) throws IOException {
         Files.createDirectories(Paths.get(UPLOAD_DIR));
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
