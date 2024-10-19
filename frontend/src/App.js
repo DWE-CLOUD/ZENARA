@@ -8,6 +8,7 @@ import Quiz from  './quiz';
 import Learning from  './learning';
 import QuizBoard from './quizboard';
 import Music from './music';
+import ChildSafetyLearningBook from './books';
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/learning" element={<Learning />} />
                 <Route path="/quizboard" element={<QuizBoard/>}/>
                 <Route path="/music" element={<Music/>}/>
+                <Route path="/books" element={<ChildSafetyLearningBook/>}/>
 
 
             </Routes>
