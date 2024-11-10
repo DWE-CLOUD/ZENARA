@@ -101,7 +101,7 @@ const KidFriendlySafetyHomepage = () => {
             >
               <FeatureIcon icon={<Heart />} color={isDarkMode ? "text-red-400" : "text-red-500"} />
               <FeatureIcon icon={<Shield />} color={isDarkMode ? "text-green-400" : "text-green-500"} link="/sec" />
-              <FeatureIcon icon={<Book />} color={isDarkMode ? "text-blue-400" : "text-blue-500"} />
+              <FeatureIcon icon={<Book />} color={isDarkMode ? "text-blue-400" : "text-blue-500"} link="/books"/>
               <FeatureIcon icon={<Star />} color={isDarkMode ? "text-yellow-400" : "text-yellow-500"} />
               <FeatureIcon icon={<Play />} color={isDarkMode ? "text-indigo-400" : "text-indigo-500"} link="/learning" />
               <FeatureIcon icon={<Brain />} color={isDarkMode ? "text-pink-400" : "text-pink-500"} link="/QuizBoard" />
