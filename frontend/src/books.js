@@ -2,17 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Sun, Moon, Cloud, Search, Library, Snowflake } from 'lucide-react';
 
-const books = [
-    { id: 1, title: "Your Body Belongs to You", author: "Cornelia Spelman", thumbnail: require('./images/book1.jpg'), level: "Beginner" },
-    { id: 2, title: "No Means No!", author: "Janine Amos", thumbnail: require('./images/book2.jpg'), level: "Beginner" },
-    { id: 3, title: "I Can Play It Safe", author: "Alison Feigh", thumbnail: require('./images/book3.jpg'), level: "Beginner" },
-    { id: 4, title: "The Safe Side: Stranger Safety", author: "Julie Aigner-Clark", thumbnail: require('./images/book4.jpg'), level: "Intermediate" },
-    { id: 5, title: "What If...?", author: "Anne Marie Pace", thumbnail: require('./images/book5.jpg'), level: "Intermediate" },
-    { id: 6, title: "Staying Safe: A Handbook for Kids", author: "Tessa Smith", thumbnail: require('./images/book6.jpg'), level: "Intermediate" },
-    { id: 7, title: "Cyber Safe: A Guide for Kids", author: "Marcia Menter", thumbnail: require('./images/book7.jpg'), level: "Advanced" },
-    { id: 8, title: "What to Do When You Feel Scared", author: "Jacqueline B. Toner and Claire A. B. Freeland", thumbnail: require('./images/book8.jpg'), level: "Advanced" },
-    { id: 9, title: "The Kid's Guide to Staying Safe Online", author: "Justine Fontes and Ron Fontes", thumbnail: require('./images/book9.jpg'), level: "Advanced" }
-];
 
 const FallingSnowflake = ({ darkMode, dimensions }) => {
     const startX = Math.random() * dimensions.width; // Start from a random x position
@@ -160,12 +149,31 @@ const ProgressBar = ({ progress, total, darkMode }) => {
 const ChildSafetyLearningBook = () => {
     const [darkMode, setDarkMode] = useState(false);
     const [readBooks, setReadBooks] = useState([]);
-    const [filteredBooks, setFilteredBooks] = useState(books);
+    const [filteredBooks, setFilteredBooks] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [dimensions, setDimensions] = useState({
         width: window.innerWidth,
         height: window.innerHeight
     });
+    const [loading, setLoading] = useState(true); // Loading state
+
+    useEffect(() => {
+        const fetchBooks = async () => {
+            setLoading(true); // Set loading to true before starting fetch
+            try {
+                const response = await fetch('http://localhost:8080/book-search?q=safety+for+kids');
+                const data = await response.json();
+                const booksWithCoverImage = data.filter(book => book.covt && book.covt !== 'No cover image available');
+                setFilteredBooks(booksWithCoverImage);
+            } catch (error) {
+                console.error('Error fetching books:', error);
+            } finally {
+                setLoading(false); // Set loading to false after data is fetched
+            }
+        };
+
+        fetchBooks();
+    }, []);
 
     useEffect(() => {
         function handleResize() {
@@ -186,7 +194,7 @@ const ChildSafetyLearningBook = () => {
     };
 
     useEffect(() => {
-        const filtered = books.filter(book =>
+        const filtered = filteredBooks.filter(book =>
             book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             book.author.toLowerCase().includes(searchTerm.toLowerCase())
         );
@@ -199,20 +207,16 @@ const ChildSafetyLearningBook = () => {
 
     return (
         <div className={`min-h-screen ${bgClass} p-4 md:p-8 transition-colors duration-300 flex flex-col items-center justify-start relative overflow-hidden`}>
-            {/* Snowflakes in dark mode */}
             {darkMode && (
                 [...Array(20)].map((_, index) => (
                     <FallingSnowflake key={index} darkMode={darkMode} dimensions={dimensions} />
                 ))
             )}
-
-            {/* Floating clouds in light mode only */}
             {!darkMode && (
                 [...Array(5)].map((_, index) => (
                     <FloatingCloud key={index} darkMode={darkMode} index={index} />
                 ))
             )}
-
             <div className="flex justify-between items-center mb-8 w-full max-w-7xl">
                 <Logo darkMode={darkMode} />
                 <div className="flex items-center space-x-4">
@@ -234,21 +238,25 @@ const ChildSafetyLearningBook = () => {
                     </button>
                 </div>
             </div>
-
             <div className="w-full max-w-7xl mx-auto relative z-10">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
-                    {filteredBooks.map(book => (
-                        <BookThumbnail
-                            key={book.id}
-                            book={book}
-                            onRead={handleReadBook}
-                            read={readBooks.includes(book.id)}
-                            darkMode={darkMode}
-                        />
-                    ))}
-                </div>
-
-                <ProgressBar progress={readBooks.length} total={books.length} darkMode={darkMode} />
+                {loading ? ( // Show loading indicator if loading is true
+                    <div className="text-center text-purple-800 text-lg font-semibold mt-8">
+                        Loading books, please wait...
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
+                        {filteredBooks.map(book => (
+                            <BookThumbnail
+                                key={book.id}
+                                book={book}
+                                onRead={handleReadBook}
+                                read={readBooks.includes(book.id)}
+                                darkMode={darkMode}
+                            />
+                        ))}
+                    </div>
+                )}
+                {!loading && <ProgressBar progress={readBooks.length} total={filteredBooks.length} darkMode={darkMode} />}
             </div>
         </div>
     );

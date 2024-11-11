@@ -143,6 +143,7 @@ const KidFriendlySafetyHomepage = () => {
                 title="Emotion Explorer"
                 description="Understand and express your feelings in a healthy way!"
                 isDarkMode={isDarkMode}
+                link="/cam"
             />
           </div>
 
