@@ -8,7 +8,7 @@ const FeatureIcon = ({ icon, color, link }) => {
 
   const handleClick = () => {
     if (link) {
-      navigate(link); // Redirects to the specified link
+      navigate(link);
     }
   };
 
@@ -49,6 +49,7 @@ const ActivityCard = ({ icon, title, description, isDarkMode, link }) => {
 
 const KidFriendlySafetyHomepage = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const navigate = useNavigate();
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
 
@@ -133,10 +134,11 @@ const KidFriendlySafetyHomepage = () => {
                 link="/music" // Pass the link prop here
             />
             <ActivityCard
-                icon={<Camera className={`w-12 h-12 ${isDarkMode ? 'text-green-300' : 'text-green-500'}`} />}
-                title="Photo Challenge"
-                description="Spot and share safe behaviors in your daily life!"
+                icon={<Shield className={`w-12 h-12 ${isDarkMode ? 'text-green-300' : 'text-green-500'}`} />}
+                title="Send SOS"
+                description="Feeling Unsafe ! Send the SOS to Parent"
                 isDarkMode={isDarkMode}
+                link='/sos'
             />
             <ActivityCard
                 icon={<Smile className={`w-12 h-12 ${isDarkMode ? 'text-yellow-300' : 'text-yellow-500'}`} />}
@@ -156,7 +158,10 @@ const KidFriendlySafetyHomepage = () => {
             <h3 className={`text-2xl font-semibold mb-4 text-center ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>Parents' Corner</h3>
             <p className="mb-4 text-center">Access resources and tips to help keep your children safe in the digital world.</p>
             <div className="flex justify-center">
-              <button className={`${isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white font-bold py-2 px-4 rounded-full text-lg transition duration-300`}>
+              <button
+                  onClick={() => navigate('/pc')}
+                  className={`${isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white font-bold py-2 px-4 rounded-full text-lg transition duration-300`}
+              >
                 Parent Resources
               </button>
             </div>

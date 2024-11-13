@@ -9,8 +9,11 @@ import Learning from  './learning';
 import QuizBoard from './quizboard';
 import Cam from './cma';
 import Music from './music';
+import Sos from './sos';
 import ChildSafetyLearningBook from './books';
 import Cma from "./cma";
+import PC from './pc';
+
 
 function App() {
     return (
@@ -19,14 +22,17 @@ function App() {
 
                 <Route path="/" element={<ZenaraLandingPage />} />
                 <Route path="/dash" element={<Dash />} />
+                <Route path="/sos" element={<Sos />} />
                 <Route path="/sec" element={<Sec />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/pc" element={<PC />} />
                 <Route path="/quiz" element={<Quiz />} />
-                <Route path="/cam" element={<Cam />} />
+                <Route path="/cam" element={<Cma />} />
                 <Route path="/learning" element={<Learning />} />
                 <Route path="/quizboard" element={<QuizBoard/>}/>
                 <Route path="/music" element={<Music/>}/>
                 <Route path="/books" element={<ChildSafetyLearningBook/>}/>
+
 
 
             </Routes>
