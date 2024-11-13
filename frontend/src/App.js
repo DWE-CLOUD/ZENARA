@@ -13,7 +13,7 @@ import Sos from './sos';
 import ChildSafetyLearningBook from './books';
 import Cma from "./cma";
 import PC from './pc';
-
+import Prof from './prof';
 
 function App() {
     return (
@@ -25,6 +25,7 @@ function App() {
                 <Route path="/sos" element={<Sos />} />
                 <Route path="/sec" element={<Sec />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/prof" element={<Prof />} />
                 <Route path="/pc" element={<PC />} />
                 <Route path="/quiz" element={<Quiz />} />
                 <Route path="/cam" element={<Cma />} />

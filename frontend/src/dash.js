@@ -28,7 +28,7 @@ const ActivityCard = ({ icon, title, description, isDarkMode, link }) => {
 
   const handleClick = () => {
     if (link) {
-      navigate(link); // Redirects to the specified link
+      navigate(link);
     }
   };
 
@@ -89,7 +89,10 @@ const KidFriendlySafetyHomepage = () => {
             >
               <h2 className={`text-3xl font-semibold mb-4 ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>Welcome to Your Safe Space!</h2>
               <p className="text-xl mb-6">Learn, play, and stay safe with us!</p>
-              <button className={`${isDarkMode ? 'bg-purple-500 hover:bg-purple-600' : 'bg-purple-600 hover:bg-purple-700'} text-white font-bold py-3 px-6 rounded-full text-lg transition duration-300`}>
+              <button
+                  onClick={()=>navigate('/prof')}
+                  className={`${isDarkMode ? 'bg-purple-500 hover:bg-purple-600' : 'bg-purple-600 hover:bg-purple-700'} text-white font-bold py-3 px-6 rounded-full text-lg transition duration-300`}>
+
                 Start Your Adventure!
               </button>
             </motion.div>
@@ -103,7 +106,7 @@ const KidFriendlySafetyHomepage = () => {
               <FeatureIcon icon={<Heart />} color={isDarkMode ? "text-red-400" : "text-red-500"} />
               <FeatureIcon icon={<Shield />} color={isDarkMode ? "text-green-400" : "text-green-500"} link="/sec" />
               <FeatureIcon icon={<Book />} color={isDarkMode ? "text-blue-400" : "text-blue-500"} link="/books"/>
-              <FeatureIcon icon={<Star />} color={isDarkMode ? "text-yellow-400" : "text-yellow-500"} />
+              <FeatureIcon icon={<Star />} color={isDarkMode ? "text-yellow-400" : "text-yellow-500"} link="/prof"/>
               <FeatureIcon icon={<Play />} color={isDarkMode ? "text-indigo-400" : "text-indigo-500"} link="/learning" />
               <FeatureIcon icon={<Brain />} color={isDarkMode ? "text-pink-400" : "text-pink-500"} link="/QuizBoard" />
             </motion.div>
