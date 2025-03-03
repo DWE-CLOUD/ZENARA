@@ -5,7 +5,7 @@
 
 
 
-Zenara is a cutting-edge platform designed to prevent and address child abuse through advanced monitoring, reporting, and awareness tools. The application combines a React.js frontend with a Java-based backend to offer a seamless and responsive user experience.
+Zenara is a cutting-edge platform designed to prevent and address child abuse through advanced monitoring, reporting, and awareness tools. The application combines a React.js frontend with a Java-based  to offer a seamless and responsive user experience.
 
 ## Table of Contents
 1. [Introduction](#introduction)
