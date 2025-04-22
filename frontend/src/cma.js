@@ -76,7 +76,7 @@ const EmotionDetector = () => {
 
 
 // Initialize the Gemini API
-    const genAI = new GoogleGenerativeAI('AIzaSyD0qTRl8lihWQAWeF3u94K59Dn31sUgecc');
+    const genAI = new GoogleGenerativeAI('AIzaSyAzz-eM9Z0Dk6dAReqybE57rfhFCZVkwvY');
 
     const capturePhoto = useCallback(async () => {
         if (!videoRef.current || !canvasRef.current) return;
